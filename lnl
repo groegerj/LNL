@@ -1,0 +1,32 @@
+#!/system/bin/sh
+
+# /system/xbin/lnl -- start a chroot LNL environment
+#
+# Copyright (C) 2014-2017 Josua Groeger.
+#
+# LNL stands for "LNL not Linux". It consists of several shell scripts
+# to establish a chroot Debian-Linux environment on an Android system.
+#
+#
+# LICENSE
+#
+# LNL is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LNL is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+su -c 'lnl-init'
+
+su -c 'mount -o remount,rw /'
+su -c 'mount -o remount,rw,exec,suid,dev /data'
+
+su -c 'chroot /debian /sbin/lnl-chroot'
+

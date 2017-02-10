@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# /sbin/lnl-resolvconf -- monitor resolv.conf via inotitywait and update
+# according to Android DNS settings, called by /sbin/lnl-chroot
+#
+# Copyright (C) 2014-2017 Josua Groeger.
+#
+# LNL stands for "LNL not Linux". It consists of several shell scripts
+# to establish a chroot Debian-Linux environment on an Android system.
+#
+#
+# LICENSE
+#
+# LNL is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LNL is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+RC=/etc/resolv.conf
+
+GETPROP=/system/bin/getprop
+HOSTNAME=$(hostname)
+
+DNS1=
+DNS2=
+DNSNEW1=
+DNSNEW2=
+
+update_resolv_conf() {
+  DNSNEW1=$($GETPROP net.dns1)
+  DNSNEW2=$($GETPROP net.dns2)
+  if [[ "$DNS1" != "$DNSNEW1" || "$DNS2" != "$DNSNEW2" ]]; then
+    DNS1="$DNSNEW1"
+    DNS2="$DNSNEW2"
+    echo "# lnl resolv.conf written by lnl-resolvconf script
+domain "$HOSTNAME".home
+search "$HOSTNAME".home "$HOSTNAME".home.
+
+nameserver "$DNS1"
+nameserver "$DNS2"" > "$RC"
+  fi
+}
+
+while true; do
+  inotifywait -qq "$RC" && update_resolv_conf
+done
+

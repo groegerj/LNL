@@ -1,0 +1,62 @@
+LNL - LNL not Linux
+=====================================================================
+
+Copyright (C) 2014-2017 Josua Groeger.
+groegerj at thp.uni-koeln dot de
+
+LNL stands for "LNL not Linux". It consists of several shell scripts
+to establish a chroot Debian-Linux environment on an Android system.
+
+LICENSE
+=====================================================================
+
+LNL is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+LNL is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+PURPOSE
+=====================================================================
+
+Run Debian-Linux in a chroot environment on an Android device.
+The main idea has been around for some time, see e.g.
+
+http://www.saurik.com/id/10
+https://wiki.debian.org/ChrootOnAndroid
+
+for an incomplete list.
+LNL is my own implementation with some advantages over the existing
+solutions.
+
+More explanation to come soon (explain directory blabla,
+home dir solution, resolv.conf etc.)
+
+PREREQUISITES
+=====================================================================
+
+1) A rooted Android with su binary. This has been mainly tested on
+   Cyanogenmod 13 but should work on other ROMs as well.
+2) A busybox binary in /system/xbin.
+3) An Android version that allows setting selinux to moderate
+   (Cyanogenmod works).
+4) On the Debian side, inotify-tools and dialog.
+5) For best user experience, jackpal's Terminal app
+   and Hacker's keyboard, both available through F-Droid.
+
+Prerequisites to be explained in more detail...
+
+USAGE
+=====================================================================
+
+Documentation to be written...
+Script to create a small Debian system with some settings missing...
+X11 usage to be documented...
+

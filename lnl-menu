@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# /sbin/lnl-menu -- start main menu, called by lnl-chroot
+#
+# Copyright (C) 2014-2017 Josua Groeger.
+#
+# LNL stands for "LNL not Linux". It consists of several shell scripts
+# to establish a chroot Debian-Linux environment on an Android system.
+#
+#
+# LICENSE
+#
+# LNL is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LNL is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+# -------------------------------------------------------------------
+# config files
+# -------------------------------------------------------------------
+
+COMMANDS_CONF=/etc/lnl/commands.conf
+MENU_CONF=/etc/lnl/menu.conf
+DEFAULTITEM_CONF=/etc/lnl/defaultitem.conf
+
+# -------------------------------------------------------------------
+# read config file with all supported commands
+# -------------------------------------------------------------------
+
+items=()
+descriptions=()
+commands=()
+while IFS=: read item description command
+do
+  items+=("$item")
+  descriptions+=("$description")
+  commands+=("$command")
+done < $COMMANDS_CONF
+
+# -------------------------------------------------------------------
+# make dialog command with all items contained in menu config file
+# -------------------------------------------------------------------
+
+options=()
+numshownitems=0
+while read item
+do
+  for i in ${!items[*]}; do
+    if [[ "${items[$i]}" == "$item" ]]; then
+      options+=("${items[$i]}" "${descriptions[$i]}")
+      ((numshownitems++))
+    fi
+  done
+done < $MENU_CONF
+
+defaultitem=""
+read defaultitem < $DEFAULTITEM_CONF
+
+dialog=(dialog --ascii-lines --cancel-label "Quit" \
+     --ok-label "Run" --no-shadow --default-item "$defaultitem" \
+     --menu "LNL not Linux. Select command:" 0 0 "$numshownitems" )
+
+# -------------------------------------------------------------------
+# main program: set correct value of terminal columns and rows
+#               execute main loop
+# -------------------------------------------------------------------
+
+IFS=$';\x1B[' read -p $'\x1B7\x1B[r\x1B[999;999H\x1B[6n\x1B8' -d R -rst 1 _ _ LINES COLUMNS _ </dev/tty \
+&& stty cols $COLUMNS rows $LINES
+
+while [ 0 ]; do
+  choice=$("${dialog[@]}" "${options[@]}" 2>&1 >/dev/tty)
+  if [ $? != 0 ]; then clear; exit 0; fi
+  for i in ${!items[*]}; do
+    if [[ "$choice" == "${items[$i]}" ]]; then
+      eval ${commands[$i]}
+    fi
+  done
+done
+

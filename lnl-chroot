@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# /sbin/lnl-chroot -- initialise chroot environment, called by lnl
+#
+# Copyright (C) 2014-2017 Josua Groeger.
+#
+# LNL stands for "LNL not Linux". It consists of several shell scripts
+# to establish a chroot Debian-Linux environment on an Android system.
+#
+#
+# LICENSE
+#
+# LNL is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LNL is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+
+export PATH=/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin:/system/bin:/system/xbin
+export TERM=linux
+export HOME=/root
+export USER=root
+export TZ='Europe/Berlin'
+
+# for some reason, hostname is not set correctly unless:
+/etc/init.d/hostname.sh
+
+running() {
+  PIDS=`pidof inotifywait 2> /dev/null`
+  [ "$PIDS" ] && return 0 || return 1
+}
+
+# solution for resolv.conf
+running || /sbin/lnl-resolvconf &
+
+/sbin/lnl-menu
+
