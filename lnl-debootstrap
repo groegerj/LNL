@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# ./lnl-debootstrap -- debootstrap a minimal Debian environment
+#
+# Copyright (C) 2014-2017 Josua Groeger.
+#
+# LNL stands for "LNL not Linux". It consists of several shell scripts
+# to establish a chroot Debian-Linux environment on an Android system.
+#
+#
+# LICENSE
+#
+# LNL is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LNL is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+# ---------------------------------------------------------
+DEBIAN=debian # target debian directory (under $DLDIR)
+VERSION=jessie # debian version
+INCLUDE=dialog,inotify-tools,mc # additional software
+ARCH=armel # CPU architecture, for most phones and tablets, it's armel
+MIRROR=http://ftp.de.debian.org/debian # closed Debian mirror
+TARFILE=lnl-debian.tar
+DLDIR=$1 # argument: download directory, default: current directory
+
+if [ ! -n "$DLDIR" ]
+then
+  DLDIR=.
+fi
+cd "$DLDIR"
+
+# ---------------------------------------------------------
+# Checking: prerequisites: run as root,
+# have debootstrap installed, target directory does not exist.
+
+if [[ $(id -u) -ne 0 ]]; then
+  echo "lnl-debootstrap: must be run as root, exiting."
+  exit 1
+fi
+
+# debootstrap must be installed for this to work
+type debootstrap >/dev/null 2>&1 || {
+  echo "lnl-debootstrap: debootstrap not installed, exiting."
+  exit 1
+}
+
+if [[ -d "$DEBIAN" ]]; then
+  echo "lnl-debootstrap: Directory \"$DEBIAN\" already exists, exiting."
+  exit 1
+fi
+
+# ---------------------------------------------------------
+
+echo ""
+echo "lnl-debootstrap: About to debootstrap with settings as follows."
+echo ""
+echo "  Download directory: $DLDIR"
+echo "  Target directory  : $DEBIAN"
+echo "  Debian Version    : $VERSION"
+echo "  Include packages  : $INCLUDE"
+echo "  Architecture      : $ARCH"
+echo "  Debian Mirror     : $MIRROR"
+echo "  Tar archive       : $TARFILE"
+echo ""
+echo "Do you want to proceed?"
+echo ""
+
+read -p "[y/n]: " YN
+if [ "$YN" != "y" ]; then
+  echo "Apparently not, exiting."
+  exit 0
+fi
+echo ""
+
+# ---------------------------------------------------------
+
+mkdir "$DEBIAN"
+
+debootstrap --verbose --include="$INCLUDE" --arch "$ARCH" --foreign "$VERSION" "$DEBIAN" "$MIRROR"
+
+# TODO: now, copy lnl-chroot etc to locations
+
+# ---------------------------------------------------------
+
+echo ""
+echo "lnl-debootstrap: debootstrapping finished."
+echo "lnl-debootstrap: Creating tar archive..."
+
+tar -c "$DEBIAN" > "$TARFILE"
+
+echo "lnl-debootstrap: Compressing with bzip2..."
+
+bzip2 "$TARFILE"
+
+echo ""
+echo "lnl-debootstrap: Program finished."
+echo ""
+
