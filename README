@@ -64,9 +64,16 @@ Documentation to be written...
 lnl-debootstrap:
 create a small Debian system and compress to an archive.
 To be run on a Debian system.
-Status: unfinished...
+Status: not yet really tested, but should work ok.
 
-need an accompanying script to be made usable...
+Steps to do for installation:
 
-Also, X11 usage to be documented...
+*) copy archive file (result of lnl-debootstrap) to Android device
+*) On Android, extract to /data/debian
+*) chroot into that, run debootstrap --second-stage, add Android users/groups...
+   TODO: describe in detail or, better, make another script
+*) On Android, copy lnl and lnl-init to /system/xbin/
+*) Now, invoking "lnl" on a terminal app should start the real thing :-)
+
+X11 usage to be documented...
 
