@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# /lnl-secondstage -- configure the newly debootstrapped system
+#
+# Copyright (C) 2014-2017 Josua Groeger.
+#
+# LNL stands for "LNL not Linux". It consists of several shell scripts
+# to establish a chroot Debian-Linux environment on an Android system.
+#
+#
+# LICENSE
+#
+# LNL is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LNL is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LNL.  If not, see <http://www.gnu.org/licenses/>.
+
+echo "lnl-secondstage: Adding Android users and groups."
+echo ""
+
+export LC_ALL=C.UTF-8
+groupadd -g 1000 system
+groupadd -g 1015 sdcard_rw
+groupadd -g 1023 media_rw
+groupadd -g 1028 sdcard_r
+groupadd -g 3001 net_bt_raw
+groupadd -g 3003 inet
+groupadd -g 3004 net_raw
+adduser --no-create-home --uid 1000 --ingroup system --disabled-login --gecos "" system
+adduser --no-create-home --uid 1023 --ingroup media_rw --disabled-password --gecos "" media_rw
+adduser media_rw sdcard_rw
+adduser media_rw sdcard_r
+adduser media_rw net_bt_raw
+adduser media_rw inet
+adduser media_rw net_raw
+
+echo ""
+echo "lnl-secondstage: Invoking apt-get."
+echo ""
+
+apt-get -y update
+apt-get -y upgrade
+apt-get -y dist-upgrade
+apt-get -y autoremove
+apt-get -y clean
+
+echo ""
+echo "lnl-secondstage: Cleaning up."
+echo ""
+
+rm /lnl-secondstage
+rm /usr/bin/qemu-arm-static
+

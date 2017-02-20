@@ -70,8 +70,9 @@ Steps to do for installation:
 
 *) copy archive file (result of lnl-debootstrap) to Android device
 *) On Android, extract to /data/debian
-*) chroot into that, run debootstrap --second-stage, add Android users/groups...
-   TODO: describe in detail or, better, make another script
+*) chroot into that, run debootstrap --second-stage
+*) add Android users/groups etc.:
+   see lnl-secondstage, to be invoked by lnl-debootstrap in the future
 *) On Android, copy lnl and lnl-init to /system/xbin/
 *) Now, invoking "lnl" on a terminal app should start the real thing :-)
 
