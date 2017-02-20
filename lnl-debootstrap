@@ -24,31 +24,25 @@
 # along with LNL.  If not, see <http://www.gnu.org/licenses/>.
 
 # ---------------------------------------------------------
-DEBIAN=debian # target debian directory (under $DLDIR)
+TARGET=debian # target debian directory (under pwd)
 VERSION=jessie # debian version
 INCLUDE=dialog,inotify-tools,mc # additional software
 ARCH=armel # CPU architecture, for most phones and tablets, it's armel
-MIRROR=http://ftp.de.debian.org/debian # closed Debian mirror
+MIRROR=http://ftp.de.debian.org/debian # closest Debian mirror
 TARFILE=lnl-debian.tar
-DLDIR=$1 # argument: download directory, default: current directory
-if [ ! -n "$DLDIR" ]
-then
-  DLDIR=.
-fi
+PWD=$(pwd)
 
 # ---------------------------------------------------------
 # LNL files to be copied to the debootstrapped Debian directory
 
-PWD=$(pwd)
-COMMANDS_CONF="$PWD"/commands.conf
-DEFAULTITEM_CONF="$PWD"/defaultitem.conf
-MENU_CONF="$PWD"/menu.conf
-SOURCES_LIST="$PWD"/sources.list
-LNL_CHROOT="$PWD"/lnl-chroot
-LNL_MENU="$PWD"/lnl-menu
-LNL_RESOLVCONF="$PWD"/lnl-resolvconf
-
-cd "$DLDIR"
+HOSTNAME=hostname
+COMMANDS_CONF=commands.conf
+DEFAULTITEM_CONF=defaultitem.conf
+MENU_CONF=menu.conf
+SOURCES_LIST=sources.list
+LNL_CHROOT=lnl-chroot
+LNL_MENU=lnl-menu
+LNL_RESOLVCONF=lnl-resolvconf
 
 # ---------------------------------------------------------
 # Checking: prerequisites: run as root, files exist,
@@ -60,6 +54,7 @@ if [[ $(id -u) -ne 0 ]]; then
 fi
 
 for i in \
+  "$HOSTNAME" \
   "$COMMANDS_CONF" \
   "$DEFAULTITEM_CONF" \
   "$MENU_CONF" \
@@ -68,7 +63,7 @@ for i in \
   "$LNL_MENU" \
   "$LNL_RESOLVCONF"; do
 {
-  [[ -f "$i" ]] || { echo "lnl-debootstrap: File $i not found, exiting."; exit 1; }
+  [[ -f "$i" ]] || { echo "lnl-debootstrap: File \"$i\" not found, exiting."; exit 1; }
 }; done
 
 type debootstrap >/dev/null 2>&1 || {
@@ -76,8 +71,8 @@ type debootstrap >/dev/null 2>&1 || {
   exit 1
 }
 
-if [[ -d "$DEBIAN" ]]; then
-  echo "lnl-debootstrap: Directory \"$DEBIAN\" already exists, exiting."
+if [[ -d "$TARGET" ]]; then
+  echo "lnl-debootstrap: Directory \"$TARGET\" already exists, exiting."
   exit 1
 fi
 
@@ -86,18 +81,18 @@ fi
 echo ""
 echo "lnl-debootstrap: About to debootstrap with settings as follows."
 echo ""
-echo "  Download directory: $DLDIR"
-echo "  Target directory  : $DEBIAN"
-echo "  Debian Version    : $VERSION"
-echo "  Include packages  : $INCLUDE"
-echo "  Architecture      : $ARCH"
-echo "  Debian Mirror     : $MIRROR"
-echo "  Tar archive       : $TARFILE"
+echo "  Current directory: $PWD"
+echo "  Target directory : $TARGET"
+echo "  Debian Version   : $VERSION"
+echo "  Include packages : $INCLUDE"
+echo "  Architecture     : $ARCH"
+echo "  Debian Mirror    : $MIRROR"
+echo "  Tar archive      : $TARFILE"
 echo ""
 echo "Do you want to proceed?"
 echo ""
 
-read -p "[y/n]: " YN
+read -p "[y/N]: " YN
 if [ "$YN" != "y" ]; then
   echo "Apparently not, exiting."
   exit 0
@@ -106,27 +101,28 @@ echo ""
 
 # ---------------------------------------------------------
 
-mkdir "$DEBIAN"
+mkdir "$TARGET"
 
-debootstrap --verbose --include="$INCLUDE" --arch "$ARCH" --foreign "$VERSION" "$DEBIAN" "$MIRROR"
+debootstrap --verbose --include="$INCLUDE" --arch "$ARCH" --foreign "$VERSION" "$TARGET" "$MIRROR"
 
 echo ""
 echo "lnl-debootstrap: Debootstrapping finished."
 echo "lnl-debootstrap: Copying LNL files."
 
-mkdir -p "$DEBIAN"/etc/lnl
-mkdir -p "$DEBIAN"/etc/apt
-cp "$COMMANDS_CONF"    "$DEBIAN"/etc/lnl/commands.conf
-cp "$DEFAULTITEM_CONF" "$DEBIAN"/etc/lnl/defaultitem.conf
-cp "$MENU_CONF"        "$DEBIAN"/etc/lnl/menu.conf
-cp "$SOURCES_LIST"     "$DEBIAN"/etc/apt/sources.list
-cp "$LNL_CHROOT"       "$DEBIAN"/sbin/lnl-chroot
-cp "$LNL_MENU"         "$DEBIAN"/sbin/lnl-menu
-cp "$LNL_RESOLVCONF"   "$DEBIAN"/sbin/lnl-resolvconf
+mkdir -p "$TARGET"/etc/lnl
+mkdir -p "$TARGET"/etc/apt
+cp "$HOSTNAME"    "$TARGET"/etc/hostname
+cp "$COMMANDS_CONF"    "$TARGET"/etc/lnl/commands.conf
+cp "$DEFAULTITEM_CONF" "$TARGET"/etc/lnl/defaultitem.conf
+cp "$MENU_CONF"        "$TARGET"/etc/lnl/menu.conf
+cp "$SOURCES_LIST"     "$TARGET"/etc/apt/sources.list
+cp "$LNL_CHROOT"       "$TARGET"/sbin/lnl-chroot
+cp "$LNL_MENU"         "$TARGET"/sbin/lnl-menu
+cp "$LNL_RESOLVCONF"   "$TARGET"/sbin/lnl-resolvconf
 
 echo "lnl-debootstrap: Creating tar archive..."
 
-tar -c "$DEBIAN" > "$TARFILE"
+tar -c "$TARGET" > "$TARFILE"
 
 echo "lnl-debootstrap: Compressing with bzip2..."
 
