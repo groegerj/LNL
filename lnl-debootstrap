@@ -35,6 +35,7 @@ PWD=$(pwd)
 # ---------------------------------------------------------
 # LNL files to be copied to the debootstrapped Debian directory
 
+ENVIRONMENT=environment
 HOSTNAME=hostname
 COMMANDS_CONF=commands.conf
 DEFAULTITEM_CONF=defaultitem.conf
@@ -54,6 +55,7 @@ if [[ $(id -u) -ne 0 ]]; then
 fi
 
 for i in \
+  "$ENVIRONMENT" \
   "$HOSTNAME" \
   "$COMMANDS_CONF" \
   "$DEFAULTITEM_CONF" \
@@ -111,7 +113,8 @@ echo "lnl-debootstrap: Copying LNL files."
 
 mkdir -p "$TARGET"/etc/lnl
 mkdir -p "$TARGET"/etc/apt
-cp "$HOSTNAME"    "$TARGET"/etc/hostname
+cp "$ENVIRONMENT"      "$TARGET"/etc/environment
+cp "$HOSTNAME"         "$TARGET"/etc/hostname
 cp "$COMMANDS_CONF"    "$TARGET"/etc/lnl/commands.conf
 cp "$DEFAULTITEM_CONF" "$TARGET"/etc/lnl/defaultitem.conf
 cp "$MENU_CONF"        "$TARGET"/etc/lnl/menu.conf
