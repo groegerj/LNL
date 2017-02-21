@@ -28,13 +28,12 @@ if [[ $(id -u) -ne 0 ]]; then
   exit 1
 fi
 
-tmp_dirs=(tmp run)
 debian_dirs=(bin opt root sbin usr etc lib srv var)
 android_dirs=(dev proc sys data system mnt storage) # essential ones...
 
 home_dir=/data/media/home
 sdcard_source=/data/media/0
-sdcard_target=/home/sdcard
+sdcard_targets=(/sdcard /home/sdcard)
 
 debian_root=/debian
 android_root=/android
@@ -44,7 +43,6 @@ debian_system=/data/debian
 mountcommand="busybox mount"
 
 if [[ -d "$debian_root" ]]; then
-#  echo "debian_init: Directory \"$debian_root\" already exists, exiting."
   exit 0
 fi
 
@@ -113,19 +111,28 @@ for i in ${android_dirs[*]}; do
   else
     $mountcommand --rbind "/$i" "$debian_root/$i"
   fi
-#  ln -s "$android_root/$i" "$debian_root/$i"
 done
 
 for i in ${debian_dirs[*]}; do
   mkdir "$debian_root/$i"
   $mountcommand --rbind "$debian_system/$i" "$debian_root/$i"
-#  ln -s "$android_root/${debian_system#/}/$i" "$debian_root/$i"
 done
 
 # home directory
-mkdir "$debian_root/home"
+mkdir -m 755 "$debian_root/home"
+
+if [[ ! -d "$home_dir" ]]; then
+  mkdir -m 755 "$home_dir"
+  chown media_rw:media_rw "$home_dir"
+fi
 $mountcommand --rbind "$home_dir" "$debian_root/home"
-$mountcommand --rbind "$sdcard_source" "$debian_root/${sdcard_target#/}"
+
+for i in ${sdcard_targets[*]}; do
+  if [[ ! -d "$debian_root/${i#/}" ]]; then
+    mkdir "$debian_root/${i#/}"
+  fi
+  $mountcommand --rbind "$sdcard_source" "$debian_root/${i#/}"
+done
 
 # Strange, the android system seems not to have loop device files by default
 for i in 0 1 2 3 4 5 6 7
