@@ -114,11 +114,18 @@ mkdir "$TARGET"
 debootstrap --verbose --include="$INCLUDE" --arch "$ARCH" --foreign "$VERSION" "$TARGET" "$MIRROR"
 
 echo ""
-echo "lnl-debootstrap: Debootstrapping finished."
+echo "lnl-debootstrap: Debootstrapping (first stage) finished."
+echo "lnl-debootstrap: Running second stage debootstrap."
+echo ""
+
+cp "$QEMU_ARM_STATIC"  "$TARGET"/usr/bin/qemu-arm-static
+chroot "$TARGET" /debootstrap/debootstrap --second-stage
+
+echo ""
+echo "lnl-debootstrap: Second stage debootstrapping finished."
 echo "lnl-debootstrap: Copying LNL files."
 
 mkdir -p "$TARGET"/etc/lnl
-mkdir -p "$TARGET"/etc/apt
 cp "$ENVIRONMENT"      "$TARGET"/etc/environment
 cp "$HOSTNAME"         "$TARGET"/etc/hostname
 cp "$COMMANDS_CONF"    "$TARGET"/etc/lnl/commands.conf
@@ -130,15 +137,7 @@ cp "$LNL_CHROOT"       "$TARGET"/sbin/lnl-chroot
 cp "$LNL_MENU"         "$TARGET"/sbin/lnl-menu
 cp "$LNL_RESOLVCONF"   "$TARGET"/sbin/lnl-resolvconf
 cp "$RESOLV_CONF"      "$TARGET"/etc/resolv.conf
-cp "$QEMU_ARM_STATIC"  "$TARGET"/usr/bin/qemu-arm-static
 
-echo "lnl-debootstrap: Running second stage debootstrap."
-echo ""
-
-chroot "$TARGET" /debootstrap/debootstrap --second-stage
-
-echo ""
-echo "lnl-debootstrap: Second stage debootstrapping finished."
 echo "lnl-debootstrap: Running lnl-secondstage."
 echo ""
 
