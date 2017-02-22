@@ -41,9 +41,12 @@ COMMANDS_CONF=commands.conf
 DEFAULTITEM_CONF=defaultitem.conf
 MENU_CONF=menu.conf
 SOURCES_LIST=sources.list
+LNL_SECONDSTAGE=lnl-secondstage
 LNL_CHROOT=lnl-chroot
 LNL_MENU=lnl-menu
 LNL_RESOLVCONF=lnl-resolvconf
+RESOLV_CONF=/etc/resolv.conf
+QEMU_ARM_STATIC=/usr/bin/qemu-arm-static
 
 # ---------------------------------------------------------
 # Checking: prerequisites: run as root, files exist,
@@ -61,9 +64,12 @@ for i in \
   "$DEFAULTITEM_CONF" \
   "$MENU_CONF" \
   "$SOURCES_LIST" \
+  "$LNL_SECONDSTAGE" \
   "$LNL_CHROOT" \
   "$LNL_MENU" \
-  "$LNL_RESOLVCONF"; do
+  "$LNL_RESOLVCONF" \
+  "$RESOLV_CONF" \
+  "$QEMU_ARM_STATIC"; do
 {
   [[ -f "$i" ]] || { echo "lnl-debootstrap: File \"$i\" not found, exiting."; exit 1; }
 }; done
@@ -119,20 +125,53 @@ cp "$COMMANDS_CONF"    "$TARGET"/etc/lnl/commands.conf
 cp "$DEFAULTITEM_CONF" "$TARGET"/etc/lnl/defaultitem.conf
 cp "$MENU_CONF"        "$TARGET"/etc/lnl/menu.conf
 cp "$SOURCES_LIST"     "$TARGET"/etc/apt/sources.list
+cp "$LNL_SECONDSTAGE"  "$TARGET"/lnl-secondstage
 cp "$LNL_CHROOT"       "$TARGET"/sbin/lnl-chroot
 cp "$LNL_MENU"         "$TARGET"/sbin/lnl-menu
 cp "$LNL_RESOLVCONF"   "$TARGET"/sbin/lnl-resolvconf
+cp "$RESOLV_CONF"      "$TARGET"/etc/resolv.conf
+cp "$QEMU_ARM_STATIC"  "$TARGET"/usr/bin/qemu-arm-static
 
-echo "lnl-debootstrap: Creating tar archive..."
+echo "lnl-debootstrap: Running second stage debootstrap."
+echo ""
+
+chroot "$TARGET" /debootstrap/debootstrap --second-stage
+
+echo ""
+echo "lnl-debootstrap: Second stage debootstrapping finished."
+echo "lnl-debootstrap: Running lnl-secondstage."
+echo ""
+
+chroot "$TARGET" /lnl-secondstage
+
+echo ""
+echo "lnl-debootstrap: lnl-secondstage finished."
+echo "lnl-debootstrap: Cleaning up."
+
+echo "" > "$TARGET"/etc/resolv.conf
+rm "$TARGET"/lnl-secondstage
+rm "$TARGET"/usr/bin/qemu-arm-static
+
+# ---------------------------------------------------------
+
+echo "lnl-debootstrap: Debian system ready."
+echo ""
+echo "lnl-debootstrap: Creating tar archive."
 
 tar -c "$TARGET" > "$TARFILE"
 
-echo "lnl-debootstrap: Compressing with bzip2..."
+echo "lnl-debootstrap: Compressing with bzip2."
 
 bzip2 "$TARFILE"
 
+echo "lnl-debootstrap: Removing target directory."
+
+rm -rf "$TARGET"
+
 echo ""
-echo "lnl-debootstrap: Program finished."
+echo "lnl-debootstrap: Your compressed Debian system is now ready."
+echo "lnl-debootstrap: Copy $TARFILE to your Android device"
+echo "                 and unpack in /data directory."
 echo ""
 
 # ---------------------------------------------------------

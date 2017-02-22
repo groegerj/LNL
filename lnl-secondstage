@@ -52,10 +52,3 @@ apt-get -y dist-upgrade
 apt-get -y autoremove
 apt-get -y clean
 
-echo ""
-echo "lnl-secondstage: Cleaning up."
-echo ""
-
-rm /lnl-secondstage
-rm /usr/bin/qemu-arm-static
-

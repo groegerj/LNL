@@ -63,16 +63,14 @@ Documentation to be written...
 
 lnl-debootstrap:
 create a small Debian system and compress to an archive.
-To be run on a Debian system.
+To be run on a Debian system. You need the following packages there:
+apt-get install qemu qemu-user-static debootstrap
 Status: not yet really tested, but should work ok.
 
 Steps to do for installation:
 
 *) copy archive file (result of lnl-debootstrap) to Android device
 *) On Android, extract to /data/debian
-*) chroot into that, run debootstrap --second-stage
-*) add Android users/groups etc.:
-   see lnl-secondstage, to be invoked by lnl-debootstrap in the future
 *) On Android, copy lnl and lnl-init to /system/xbin/
 *) Now, invoking "lnl" on a terminal app should start the real thing :-)
 
