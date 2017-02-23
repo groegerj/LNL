@@ -41,6 +41,7 @@ debian_image=/system/lnl-debian.tar.bz2
 
 # Android toybox mount does not know recursive binds.
 mountcommand="busybox mount"
+tarcommand="busybox tar"
 
 # -------------------------------------------------------------------
 # lnl-init functions
@@ -153,7 +154,7 @@ $mountcommand -o remount,rw,exec,suid,dev /data
 if [[ ! -d "$debian_root" ]]; then
   if [[ ! -d "$debian_system" && -f "$debian_image" ]]; then
     cd /data
-    tar xvf "$debian_image"
+    $tarcommand xvjf "$debian_image"
   fi
   
   if [[ ! -d "$debian_system" ]]; then
