@@ -153,12 +153,27 @@ $mountcommand -o remount,rw,exec,suid,dev /data
 
 if [[ ! -d "$debian_root" ]]; then
   if [[ ! -d "$debian_system" && -f "$debian_image" ]]; then
+    echo ""
+    echo "lnl: Debian system directory $debian_system"
+    echo "     does not exist."
+    echo ""
+    echo "     Do you want to create it from $debian_image?"
+    echo "     Warning: Extracting the archive may take some time."
+    echo "     Afterwards, I will immediately start LNL."
+    echo ""
+    echo -n "[y/N]: "
+    read YN
+    if [ "$YN" != "y" ]; then
+      echo "Apparently not, exiting."
+      exit 0
+    fi
     cd /data
     $tarcommand xvjf "$debian_image"
   fi
   
   if [[ ! -d "$debian_system" ]]; then
-    echo "lnl: directory $debian_system does not exist and cannot be created."
+    echo "lnl: Debian system directory $debian_system"
+    echo "     does not exist and cannot be created."
     exit 1
   fi
   
