@@ -29,6 +29,7 @@ export TERM=linux
 export HOME=/root
 export USER=root
 export TZ='Europe/Berlin'
+export TMPDIR=/tmp
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
 export LANGUAGE=C.UTF-8
