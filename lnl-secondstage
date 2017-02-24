@@ -34,8 +34,8 @@ groupadd -g 1028 sdcard_r
 groupadd -g 3001 net_bt_raw
 groupadd -g 3003 inet
 groupadd -g 3004 net_raw
-adduser --no-create-home --uid 1000 --ingroup system --disabled-login --gecos "" system
-adduser --no-create-home --uid 1023 --ingroup media_rw --disabled-password --gecos "" media_rw
+adduser --home /nonexistent --shell /bin/false --no-create-home --uid 1000 --ingroup system --disabled-login --gecos "" system
+adduser --home /home --no-create-home --uid 1023 --ingroup media_rw --disabled-password --gecos "" media_rw
 adduser media_rw sdcard_rw
 adduser media_rw sdcard_r
 adduser media_rw net_bt_raw
