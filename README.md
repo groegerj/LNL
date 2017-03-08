@@ -54,13 +54,13 @@ home dir solution, resolv.conf etc.)
 PREREQUISITES
 =====================================================================
 
-1) A rooted Android with su binary. This has been mainly tested on
+*  A rooted Android with su binary. This has been mainly tested on
    Cyanogenmod 13 but should work on other ROMs as well.
-2) A busybox binary in /system/xbin.
-3) An Android version that allows setting selinux to moderate
+*  A busybox binary in /system/xbin.
+*  An Android version that allows setting selinux to moderate
    (Cyanogenmod works).
-4) On the Debian side, inotify-tools and dialog.
-5) For best user experience, jackpal's Terminal app
+*  On the Debian side, inotify-tools and dialog.
+*  For best user experience, jackpal's Terminal app
    and Hacker's keyboard, both available through F-Droid.
 
 Prerequisites to be explained in more detail...
@@ -81,10 +81,10 @@ Status: not yet really tested, but should work ok.
 
 Steps to do for installation:
 
-*) copy archive file (result of lnl-debootstrap) to Android device
-*) On Android, extract to /data/debian
-*) On Android, copy lnl and lnl-init to /system/xbin/
-*) Now, invoking "lnl" on a terminal app should start the real thing :-)
+*  copy archive file (result of lnl-debootstrap) to Android device
+*  On Android, extract to /data/debian
+*  On Android, copy lnl and lnl-init to /system/xbin/
+*  Now, invoking "lnl" on a terminal app should start the real thing :-)
 
 X11 usage to be documented...
 
