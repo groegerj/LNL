@@ -52,7 +52,12 @@ home dir solution, resolv.conf etc.)
 # PREREQUISITES
 
 LNL has been developed and tested mainly on Cyanogenmod 13
-and LineageOS 14.1. Stock firmware or other Android ROMs should
+and LineageOS 14.1. LineageOS is the successor of Cyanogenmod,
+which has been abandoned.
+
+http://lineageos.org
+
+Stock firmware or other Android ROMs should
 work as well but might require some additional tuning.
 In any case, the following is needed:
 
@@ -70,7 +75,7 @@ but starting your favourite terminal app (see below) and type
 
 su is strictly needed for LNL to work.
 
-## Have su
+### Have su
 
 Cyanogenmod comes with su, you just has to activate it (see below).
 LineageOS does not. If you install LineageOS from a ROM zip file,
@@ -86,7 +91,7 @@ before building. See
 
 http://lineageos.org/Update-and-Build-Prep
 
-## Activate su
+### Activate su
 
 On Cyanogenmod/LineageOS, su has to be activated.
 In the settings, go to "About phone/table",
@@ -104,7 +109,7 @@ TODO explanation, OK on Cyanogenmod/LineageOS
 
 TODO explanation
 
-## terminal
+## Terminal
 
 For best user experience, jackpal's Terminal app
 and Hacker's keyboard, both available through F-Droid.
