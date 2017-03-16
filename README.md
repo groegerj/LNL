@@ -57,14 +57,20 @@ work as well but might require some additional tuning.
 In any case, the following is needed:
 
 *  A rooted Android with su binary.
-*  A busybox binary in /system/xbin.
 *  An Android version that allows setting selinux to moderate.
+*  A busybox binary in /system/xbin.
 *  A terminal emulator app.
 
-In addition, you need a terminal emulator app.
+## su command
 
-*  For best user experience, jackpal's Terminal app
-   and Hacker's keyboard, both available through F-Droid.
+## selinux
+
+## busybox
+
+## terminal
+
+For best user experience, jackpal's Terminal app
+and Hacker's keyboard, both available through F-Droid.
 
 Prerequisites to be explained in more detail...
 
