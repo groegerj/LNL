@@ -63,16 +63,51 @@ In any case, the following is needed:
 
 ## su command
 
+You can check whether you have the su command available
+but starting your favourite terminal app (see below) and type
+
+  su
+
+su is strictly needed for LNL to work.
+
+## Have su
+
+Cyanogenmod comes with su, you just has to activate it (see below).
+LineageOS does not. If you install LineageOS from a ROM zip file,
+install addonsu-arm-signed.zip in addition, which is available from
+
+https://download.lineageos.org/extras
+
+If you build LineageOS from source on your own, run
+
+  export WITH_SU=true
+
+before building. See
+
+http://lineageos.org/Update-and-Build-Prep
+
+## Activate su
+
+On Cyanogenmod/LineageOS, su has to be activated.
+In the settings, go to "About phone/table",
+and there tap several times on the "build number" item.
+This makes the developer settings available. Go there, and activate
+root access for apps. Then open the terminal again and type su.
+You will be asked if you grant root to the terminal app.
+Mark your decision as permanent and say yes.
+
 ## selinux
 
+TODO explanation, OK on Cyanogenmod/LineageOS
+
 ## busybox
+
+TODO explanation
 
 ## terminal
 
 For best user experience, jackpal's Terminal app
 and Hacker's keyboard, both available through F-Droid.
-
-Prerequisites to be explained in more detail...
 
 # USAGE
 
