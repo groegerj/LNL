@@ -1,5 +1,4 @@
-LNL - LNL not Linux
-=====================================================================
+# LNL - LNL not Linux
 
 Copyright (C) 2014-2017 Josua Groeger.
 groegerj at thp.uni-koeln dot de
@@ -7,8 +6,7 @@ groegerj at thp.uni-koeln dot de
 LNL stands for "LNL not Linux". It consists of several shell scripts
 to establish a chroot Debian-Linux environment on an Android system.
 
-LICENSE
-=====================================================================
+# LICENSE
 
 LNL is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,13 +21,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with LNL.  If not, see <http://www.gnu.org/licenses/>.
 
-PURPOSE AND HISTORY
-=====================================================================
+# PURPOSE AND HISTORY
 
 Run Debian-Linux in a chroot environment on an Android device.
 The main idea has been around for some time, see e.g.
 
 http://www.saurik.com/id/10
+
 https://wiki.debian.org/ChrootOnAndroid
 
 for an incomplete list.
@@ -51,22 +49,26 @@ and mutual advantages.
 More explanation to come soon (explain directory blabla,
 home dir solution, resolv.conf etc.)
 
-PREREQUISITES
-=====================================================================
+# PREREQUISITES
 
-*  A rooted Android with su binary. This has been mainly tested on
-   Cyanogenmod 13 but should work on other ROMs as well.
+LNL has been developed and tested mainly on Cyanogenmod 13
+and LineageOS 14.1. Stock firmware or other Android ROMs should
+work as well but might require some additional tuning.
+In any case, the following is needed:
+
+*  A rooted Android with su binary.
 *  A busybox binary in /system/xbin.
-*  An Android version that allows setting selinux to moderate
-   (Cyanogenmod works).
-*  On the Debian side, inotify-tools and dialog.
+*  An Android version that allows setting selinux to moderate.
+*  A terminal emulator app.
+
+In addition, you need a terminal emulator app.
+
 *  For best user experience, jackpal's Terminal app
    and Hacker's keyboard, both available through F-Droid.
 
 Prerequisites to be explained in more detail...
 
-USAGE
-=====================================================================
+# USAGE
 
 Scripts work fine provided one has a suitably configured Debian system
 installed in /data/debian...
@@ -77,7 +79,8 @@ lnl-debootstrap:
 create a small Debian system and compress to an archive.
 To be run on a Debian system. You need the following packages there:
 apt-get install qemu qemu-user-static debootstrap
-Status: not yet really tested, but should work ok.
+Status: works ok.
+Minimal requirement for additional software: inotify-tools and dialog.
 
 Steps to do for installation:
 
