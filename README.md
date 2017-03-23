@@ -107,7 +107,40 @@ TODO explanation, OK on Cyanogenmod/LineageOS
 
 ## busybox
 
-TODO explanation
+Busybox combines tiny versions of many common Unix utilities such as
+the mount command used by LNL. On Android systems, there has been
+a similar such program called Toybox, which also provides a mount
+command. However (as of Cyanogenmod 13), Toybox seems not to support
+recursive bind mounts needed by LNL, which is why Busybox is needed.
+
+You can check whether you have the su command available
+but starting your favourite terminal app (see below) and type
+
+  busybox
+
+### Install Busybox - Manual Way
+
+Busybox is available from
+
+https://busybox.net
+
+You may download the source code and compile busybox on your own
+or use an executable binary file provided there.
+In any case, make sure the busybox binary is compiled for the ARM
+platform and statically linked, i.e. without further system dependencies.
+
+In the following, I assume that you have a working busybox file
+available and access to a root shell on your device, be it from a
+terminal app with su command or through adb. Run the following commands.
+
+mount -o remount,rw /system
+cp PATHTO/busybox /system/xbin/busybox
+(or adb push PATHTO/busybox /system/xbin/busybox)
+chmod 755 /system/xbin/busybox
+
+### Include Busybox as Part of a Custom ROM
+
+todo explanation
 
 ## Terminal
 
