@@ -133,10 +133,10 @@ In the following, I assume that you have a working busybox file
 available and access to a root shell on your device, be it from a
 terminal app with su command or through adb. Run the following commands.
 
-  mount -o remount,rw /system
-  cp PATHTO/busybox /system/xbin/busybox
-  (or adb push PATHTO/busybox /system/xbin/busybox)
-  chmod 755 /system/xbin/busybox
+    mount -o remount,rw /system
+    cp PATHTO/busybox /system/xbin/busybox
+    (or adb push PATHTO/busybox /system/xbin/busybox)
+    chmod 755 /system/xbin/busybox
 
 ### Include Busybox as Part of a Custom ROM
 
