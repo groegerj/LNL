@@ -71,7 +71,7 @@ In any case, the following is needed:
 You can check whether you have the su command available
 but starting your favourite terminal app (see below) and type
 
-  su
+    su
 
 su is strictly needed for LNL to work.
 
@@ -116,7 +116,7 @@ recursive bind mounts needed by LNL, which is why Busybox is needed.
 You can check whether you have the su command available
 but starting your favourite terminal app (see below) and type
 
-   busybox
+    busybox
 
 ### Install Busybox - Manual Way
 
@@ -169,7 +169,7 @@ besides these two things (ARM and static).
 
 In Android.mk, look for the line
 
-  LOCAL_MODULE := busybox
+    LOCAL_MODULE := busybox
 
 As the name suggest, this is the module's name which must be made known to
 the build system, that is to any build makefile used for the build.
