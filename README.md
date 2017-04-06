@@ -116,7 +116,7 @@ recursive bind mounts needed by LNL, which is why Busybox is needed.
 You can check whether you have the su command available
 but starting your favourite terminal app (see below) and type
 
-  busybox
+   busybox
 
 ### Install Busybox - Manual Way
 
@@ -184,11 +184,11 @@ try to use the busybox module optionally shipped with CyanogenMod/LineageOS.
 Instead of populating the directory on your own, use the one from github:
 Add the line
 
-  <project name="CyanogenMod/android_external_busybox" path="external/busybox" remote="github" revision="cm-13.0" />
+    <project name="CyanogenMod/android_external_busybox" path="external/busybox" remote="github" revision="cm-13.0" />
 
 or
 
-  <project name="LineageOS/android_external_busybox" path="external/busybox" remote="github" revision="cm-14.1" />
+    <project name="LineageOS/android_external_busybox" path="external/busybox" remote="github" revision="cm-14.1" />
 
 (or whatever with the intended name and revision) to your
 
