@@ -133,14 +133,75 @@ In the following, I assume that you have a working busybox file
 available and access to a root shell on your device, be it from a
 terminal app with su command or through adb. Run the following commands.
 
-mount -o remount,rw /system
-cp PATHTO/busybox /system/xbin/busybox
-(or adb push PATHTO/busybox /system/xbin/busybox)
-chmod 755 /system/xbin/busybox
+  mount -o remount,rw /system
+  cp PATHTO/busybox /system/xbin/busybox
+  (or adb push PATHTO/busybox /system/xbin/busybox)
+  chmod 755 /system/xbin/busybox
 
 ### Include Busybox as Part of a Custom ROM
 
-todo explanation
+As with any additional software to be included,
+the busybox stuff has to go to its own subdirectory with Android.mk makefile.
+You can choose between putting the source code there, to be compiled along with
+the other stuff when you build the ROM, or a precompiled busybox binary to be
+installed as in the manual way described above, but by the build system.
+Let us assume that everything lives in
+
+  external/busybox
+
+(within the source tree), although the precise choice of subdirectory does
+not matter too much, and there is an according makefile
+
+  external/busybox/Android.mk
+
+For the precomiled option,
+create that directory, copy a precomiled busybox binary there and copy
+the file Android_busybox.mk (which comes with LNL) renamed to Android.mk there.
+Busybox binaries are also available from
+
+https://busybox.net
+
+but of course feel free to compile it on your own.
+Just make sure the architecture matches your target system (usually ARM something),
+and you build the binary without dependencies on dynamic libraries (static build).
+When you compile, busybox offers tons of settings. You need not change the default options,
+besides these two things (ARM and static).
+
+In Android.mk, look for the line
+
+  LOCAL_MODULE := busybox
+
+As the name suggest, this is the module's name which must be made known to
+the build system, that is to any build makefile used for the build.
+For example, add 'busybox' to the 'PRODUCT_PACKAGES +=' command in the file
+
+  build/target/product/embedded.mk
+
+If everything is done correctly, your new ROM will come with busybox.
+
+As an alternative for the first step (that busybox directory), you may
+try to use the busybox module optionally shipped with CyanogenMod/LineageOS.
+Instead of populating the directory on your own, use the one from github:
+Add the line
+
+  <project name="CyanogenMod/android_external_busybox" path="external/busybox" remote="github" revision="cm-13.0" />
+
+or
+
+  <project name="LineageOS/android_external_busybox" path="external/busybox" remote="github" revision="cm-14.1" />
+
+(or whatever with the intended name and revision) to your
+
+  roomservice.xml
+
+and, of course, do not forget to add 'busybox' to embedded.mk (or whatever).
+That way of including busybox has been my preferred one on CyanogenMod 13.
+For some reason, it does not work for me on LineageOS 14.1. To be more precise,
+the module gets included, busybox is there, and can be started as an executable.
+But behaves extremely weird and does not work at all as intended.
+Compared to CM 13, nothing essential has changed, so I guess there might have
+been changes in the bionic library which broke busybox(?)
+For now, I gave up on this and are happy with the first method (precompiled binary).
 
 ## Terminal
 
