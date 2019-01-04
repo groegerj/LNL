@@ -25,7 +25,7 @@
 
 # ---------------------------------------------------------
 TARGET=debian # target debian directory (under pwd)
-VERSION=jessie # debian version
+VERSION=buster # debian version
 INCLUDE=dialog,inotify-tools,mc,cryptsetup,ssh,psmisc,unison,vim # additional software
 ARCH=armel # CPU architecture, for most phones and tablets, it's armel
 MIRROR=http://ftp.de.debian.org/debian # closest Debian mirror
